@@ -106,6 +106,17 @@ function checkWinner() {
         }
     }
 
+    // Diagonal check
+    let center = Gameboard.gameboard[1][1];
+
+    if (center !== null) {
+        if (
+            (Gameboard.gameboard[0][0] === center && Gameboard.center[2][2] === center) ||
+            (Gameboard.gameboard[2][0] === center && Gameboard.center[0][2] === center)
+        ) {
+            return center;
+        }
+    }
 
     return null;
 }
