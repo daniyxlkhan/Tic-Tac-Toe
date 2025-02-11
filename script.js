@@ -33,58 +33,79 @@ function gameLoop() {
             x = parseInt(prompt("X's turn (enter x coordinate)"));
             y = parseInt(prompt("X's turn (enter y coordinate)"));
             game.makeMove(x, y, game.player1);
+            console.log(Gameboard.gameboard);
         } else {
             temp++;
             x = parseInt(prompt("O's turn (enter x coordinate)"));
             y = parseInt(prompt("O's turn (enter y coordinate)"));
             game.makeMove(x, y, game.player2);
+            console.log(Gameboard.gameboard);
         }
+
 
         let winner = checkWinner();
         if (winner !== null) {
             alert(`${winner} wins!`);
             break;
         }
+
+        if (checkIfFull()) {
+            alert("Draw");
+            break;
+        }
     }
 }
 
-function checkWinner() {
-    let counterX = 0;
-    let counterY = 0;
-
+function checkIfFull() {
     for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (Gameboard.gameboard[i][j] == null) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function checkWinner() {
+    let counterX, counterO;
+
+    // Horizontal check
+    for (let i = 0; i < 3; i++) {
+        counterX = 0;
+        counterO = 0;
         for (let j = 0; j < 3; j++) {
             if ('X' === Gameboard.gameboard[i][j]) {
                 counterX++;
-            } else {
-                counterY++;
+            } else if ('O' === Gameboard.gameboard[i][j]) {
+                counterO++;
             }
         }
         if (counterX === 3) {
             return 'X';
-        } else if (counterY === 3) {
+        } else if (counterO === 3) {
             return 'O';
         }
-        counterX = 0;
-        counterY = 0;
     }
 
-    for (let j = 0; j < 3; j++) {
-        for (let i = 0; i < 3; i++) {
-            if ('X' === Gameboard.gameboard[i][j]) {
+    // Vertical check
+    for (let i = 0; i < 3; i++) {
+        counterX = 0;
+        counterO = 0;
+        for (let j = 0; j < 3; j++) {
+            if ('X' === Gameboard.gameboard[j][i]) {
                 counterX++;
-            } else {
-                counterY++;
+            } else if ('O' === Gameboard.gameboard[i][j]) {
+                counterO++;
             }
         }
         if (counterX === 3) {
             return 'X';
-        } else if (counterY === 3) {
+        } else if (counterO === 3) {
             return 'O';
         }
-        counterX = 0;
-        counterY = 0;
     }
+
 
     return null;
 }
@@ -92,7 +113,7 @@ function checkWinner() {
 
 gameLoop();
 
-console.log(Gameboard.gameboard);
+
 
 
 
