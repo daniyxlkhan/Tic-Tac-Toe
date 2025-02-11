@@ -95,7 +95,7 @@ function checkWinner() {
         for (let j = 0; j < 3; j++) {
             if ('X' === Gameboard.gameboard[j][i]) {
                 counterX++;
-            } else if ('O' === Gameboard.gameboard[i][j]) {
+            } else if ('O' === Gameboard.gameboard[j][i]) {
                 counterO++;
             }
         }
