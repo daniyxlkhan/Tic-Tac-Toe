@@ -25,33 +25,40 @@ function gameController() {
 
 function gameLoop() {
     let game = gameController();
-    let temp = 0;
+    let players = [player1, player2]; // Players stored in array
+    let currentPlayerIndex = 0; // starts with player1(X)
+
     while (true) {
         let x,y;
-        if (temp % 2 === 0) {
-            temp++;
-            x = parseInt(prompt("X's turn (enter x coordinate)"));
-            y = parseInt(prompt("X's turn (enter y coordinate)"));
-            game.makeMove(x, y, game.player1);
-            console.log(Gameboard.gameboard);
-        } else {
-            temp++;
-            x = parseInt(prompt("O's turn (enter x coordinate)"));
-            y = parseInt(prompt("O's turn (enter y coordinate)"));
-            game.makeMove(x, y, game.player2);
-            console.log(Gameboard.gameboard);
-        }
+        let currentPlayer = players[currentPlayerIndex];
 
-
-        let winner = checkWinner();
+        x = parseInt(prompt(`${currentPlayer.symbol} turn (enter x coordinate)`));
+        y = parseInt(prompt(`${currentPlayer.symbol} turn (enter y coordinate)`));
+        game.makeMove(x, y, currentPlayer.symbol);
+     
+        console.log(Gameboard.gameboard);
+       
+        let winner = checkWinner(game.player1, game.player2);
         if (winner !== null) {
             alert(`${winner} wins!`);
-            break;
+            winner.incrementScore();
+            resetGame();
         }
 
         if (checkIfFull()) {
             alert("Draw");
-            break;
+            resetGame();
+        }
+
+        // switch to next player
+        currentPlayerIndex = (currentPlayerIndex + 1) % 2;
+    }
+}
+
+function resetGame() {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            Gameboard.gameboard[i][j] == null
         }
     }
 }
@@ -67,48 +74,47 @@ function checkIfFull() {
     return true;
 }
 
-function checkWinner() {
-    let counterX, counterO;
+function checkWinner(player1, player2) {
+    let counter1, counter2;
 
     // Horizontal check
     for (let i = 0; i < 3; i++) {
-        counterX = 0;
-        counterO = 0;
+        counter1 = 0;
+        counter2 = 0;
         for (let j = 0; j < 3; j++) {
-            if ('X' === Gameboard.gameboard[i][j]) {
-                counterX++;
-            } else if ('O' === Gameboard.gameboard[i][j]) {
-                counterO++;
+            if (player1.symbol === Gameboard.gameboard[i][j]) {
+                counter1++;
+            } else if (player2.symbol === Gameboard.gameboard[i][j]) {
+                counter2++;
             }
         }
-        if (counterX === 3) {
-            return 'X';
-        } else if (counterO === 3) {
-            return 'O';
+        if (counter1 === 3) {
+            return player1;
+        } else if (counter2 === 3) {
+            return player2;
         }
     }
 
     // Vertical check
     for (let i = 0; i < 3; i++) {
-        counterX = 0;
-        counterO = 0;
+        counter1 = 0;
+        counter2 = 0;
         for (let j = 0; j < 3; j++) {
-            if ('X' === Gameboard.gameboard[j][i]) {
-                counterX++;
-            } else if ('O' === Gameboard.gameboard[j][i]) {
-                counterO++;
+            if (player1.symbol === Gameboard.gameboard[j][i]) {
+                counter1++;
+            } else if (player2.symbol === Gameboard.gameboard[j][i]) {
+                counter2++;
             }
         }
-        if (counterX === 3) {
-            return 'X';
-        } else if (counterO === 3) {
-            return 'O';
+        if (counter1 === 3) {
+            return player1;
+        } else if (counter2 === 3) {
+            return player2;
         }
     }
 
     // Diagonal check
     let center = Gameboard.gameboard[1][1];
-
     if (center !== null) {
         if (
             (Gameboard.gameboard[0][0] === center && Gameboard.center[2][2] === center) ||
