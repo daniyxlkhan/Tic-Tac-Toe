@@ -1,0 +1,16 @@
+
+
+
+.gameboard {
+    display: grid;
+    grid-template-rows: repeat(3, 100px);
+    grid-template-columns: repeat(3, 100px)
+}
+
+
+
+.board-buttons {
+    width: 100px;
+    height: 100px;
+}
+

@@ -25,16 +25,16 @@ function gameController() {
 
 function gameLoop() {
     let game = gameController();
-    let players = [player1, player2]; // Players stored in array
+    let players = [game.player1, game.player2]; // Players stored in array
     let currentPlayerIndex = 0; // starts with player1(X)
 
     while (true) {
         let x,y;
         let currentPlayer = players[currentPlayerIndex];
 
-        x = parseInt(prompt(`${currentPlayer.symbol} turn (enter x coordinate)`));
-        y = parseInt(prompt(`${currentPlayer.symbol} turn (enter y coordinate)`));
-        game.makeMove(x, y, currentPlayer.symbol);
+            // x = parseInt(prompt(`${currentPlayer.symbol} turn (enter x coordinate)`));
+            // y = parseInt(prompt(`${currentPlayer.symbol} turn (enter y coordinate)`));
+        game.makeMove(x, y, currentPlayer);
      
         console.log(Gameboard.gameboard);
        
@@ -43,11 +43,13 @@ function gameLoop() {
             alert(`${winner} wins!`);
             winner.incrementScore();
             resetGame();
+            break;
         }
 
         if (checkIfFull()) {
             alert("Draw");
             resetGame();
+            break;
         }
 
         // switch to next player
@@ -58,7 +60,7 @@ function gameLoop() {
 function resetGame() {
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            Gameboard.gameboard[i][j] == null
+            Gameboard.gameboard[i][j] = null;
         }
     }
 }
@@ -117,8 +119,8 @@ function checkWinner(player1, player2) {
     let center = Gameboard.gameboard[1][1];
     if (center !== null) {
         if (
-            (Gameboard.gameboard[0][0] === center && Gameboard.center[2][2] === center) ||
-            (Gameboard.gameboard[2][0] === center && Gameboard.center[0][2] === center)
+            (Gameboard.gameboard[0][0] === center && Gameboard.gameboard[2][2] === center) ||
+            (Gameboard.gameboard[2][0] === center && Gameboard.gameboard[0][2] === center)
         ) {
             return center;
         }
@@ -127,8 +129,34 @@ function checkWinner(player1, player2) {
     return null;
 }
 
+/* DISPLAY LOGIC FOR THE GAME */
 
+function displayController() {
+    const gameboard = document.querySelector(".gameboard");
+    
+    const boardTiles = boardTilesGenerator(); // make buttons for the gameboard
+    addTilesToGameboard(gameboard, boardTiles); // add the buttons to the gameboard
+}
+
+function addTilesToGameboard(gameboard, boardTiles) {
+    for (let i = 0; i < boardTiles.length; i++) {
+        gameboard.append(boardTiles[i]);
+    }
+}
+
+function boardTilesGenerator() {
+    let boardTiles = [];
+    for (let i = 0; i < 9; i++) {
+        const boardTile = document.createElement("button");
+        boardTile.classList.add("board-buttons")
+        boardTiles.push(boardTile);
+    }
+    return boardTiles;
+}
+
+document.addEventListener("DOMContentLoaded", displayController);
 gameLoop();
+
 
 
 
