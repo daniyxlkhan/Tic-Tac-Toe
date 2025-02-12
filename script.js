@@ -18,43 +18,39 @@ function gameController() {
 
     function makeMove (x, y, player) {
         Gameboard.gameboard[x][y] = player.symbol;
+
+        let tile = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+        if (tile) {
+            tile.classList.add(player.symbol === 'X'? 'board-tile-marked-cross': 'board-tile-marked-circle');
+        }
     }
 
-    return {player1, player2, makeMove}
-}
-
-function gameLoop() {
-    let game = gameController();
-    let players = [game.player1, game.player2]; // Players stored in array
+    let players = [player1, player2]; // Players stored in array
     let currentPlayerIndex = 0; // starts with player1(X)
 
-    while (true) {
-        let x,y;
+    function gameStart(x, y) {
         let currentPlayer = players[currentPlayerIndex];
 
-            // x = parseInt(prompt(`${currentPlayer.symbol} turn (enter x coordinate)`));
-            // y = parseInt(prompt(`${currentPlayer.symbol} turn (enter y coordinate)`));
-        game.makeMove(x, y, currentPlayer);
+        makeMove(x, y, currentPlayer);
      
         console.log(Gameboard.gameboard);
-       
-        let winner = checkWinner(game.player1, game.player2);
+
+        let winner = checkWinner(player1, player2);
         if (winner !== null) {
-            alert(`${winner} wins!`);
+            alert(`${winner.symbol} wins!`);
             winner.incrementScore();
             resetGame();
-            break;
         }
 
         if (checkIfFull()) {
             alert("Draw");
             resetGame();
-            break;
         }
-
         // switch to next player
         currentPlayerIndex = (currentPlayerIndex + 1) % 2;
     }
+
+    return gameStart;
 }
 
 function resetGame() {
@@ -144,18 +140,32 @@ function addTilesToGameboard(gameboard, boardTiles) {
     }
 }
 
+const playGame = gameController();
+
 function boardTilesGenerator() {
     let boardTiles = [];
     for (let i = 0; i < 9; i++) {
         const boardTile = document.createElement("div");
         boardTile.classList.add("board-tile")
+
+        let x = Math.floor(i / 3); // Row index
+        let y = i % 3; // Column index
+
+        boardTile.setAttribute("data-x", "" + x);
+        boardTile.setAttribute("data-y", "" + y);
+
+        boardTile.addEventListener("click", function() {
+            let tileX = parseInt(this.getAttribute("data-x"));
+            let tileY = parseInt(this.getAttribute("data-y"));
+
+            playGame(tileX, tileY);
+        })
         boardTiles.push(boardTile);
     }
     return boardTiles;
 }
 
 document.addEventListener("DOMContentLoaded", displayController);
-gameLoop();
 
 
 

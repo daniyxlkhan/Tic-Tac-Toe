@@ -6,6 +6,7 @@
 body {
     background-color: var(--background-color);
 }
+
 .gameboard {
     display: grid;
     grid-template-rows: repeat(3, 1fr);
