@@ -4,7 +4,7 @@
 }
 
 :root {
-    --background-color: #DE8381;
+    --background-color: #858f56;
     --tile-color: #f2eff2;
 }
 
@@ -46,6 +46,8 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
+    padding: 20px;
 }
 
 .gameboard {
@@ -97,18 +99,18 @@ img {
 }
 
 .cross {
-    background-image: url("./assets/cross-svgrepo-com.svg");
+    background-image: url("./assets/cross.png");
     background-repeat: no-repeat;
     background-position-x: 48%;
     background-position-y: 52%;
-    background-size: 60%;
+    background-size: 80%;
 }
 
 .circle {
-    background-image: url("./assets/circle-svgrepo-com.svg");
+    background-image: url("./assets/tick.png");
     background-repeat: no-repeat;
     background-position-x: 48%;
     background-position-y: 52%;
-    background-size: 60%;
+    background-size: 80%;
 }
 
