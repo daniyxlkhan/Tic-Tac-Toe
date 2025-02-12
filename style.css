@@ -114,3 +114,14 @@ img {
     background-size: 80%;
 }
 
+@media screen and (max-width: 600px) {
+    .gameboard-container {
+        margin: 16px;
+        gap: 16px;
+    }
+
+    body {
+        height: 100dvh;
+    }
+}
+
