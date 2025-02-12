@@ -18,11 +18,6 @@ function gameController() {
 
     function makeMove (x, y, player) {
         Gameboard.gameboard[x][y] = player.symbol;
-
-        let tile = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-        if (tile) {
-            tile.classList.add(player.symbol === 'X'? 'board-tile-marked-cross': 'board-tile-marked-circle');
-        }
     }
 
     let players = [player1, player2]; // Players stored in array
@@ -30,35 +25,42 @@ function gameController() {
 
     function gameStart(x, y) {
         let currentPlayer = players[currentPlayerIndex];
-
-        makeMove(x, y, currentPlayer);
+        
+        if (Gameboard.gameboard[x][y] == null) {
+            makeMove(x, y, currentPlayer);
+            updateUI();
+            currentPlayerIndex = (currentPlayerIndex + 1) % 2;   // switch to next player
+        }
      
         console.log(Gameboard.gameboard);
 
-        let winner = checkWinner(player1, player2);
+        var winner = checkWinner(player1, player2);
         if (winner !== null) {
-            alert(`${winner.symbol} wins!`);
-            winner.incrementScore();
-            resetGame();
+            setTimeout(() => {
+                alert(`${winner.symbol} wins!`);
+                winner.incrementScore();
+                console.log(`${winner.symbol}'s score:"` + winner.getScore());
+                resetGame();
+            }, 100);
+        } else if (checkIfFull()) {
+            setTimeout(() => {
+                alert("Draw");
+                resetGame();
+            }, 150)
         }
-
-        if (checkIfFull()) {
-            alert("Draw");
-            resetGame();
-        }
-        // switch to next player
-        currentPlayerIndex = (currentPlayerIndex + 1) % 2;
     }
 
+    function resetGame() {
+        currentPlayerIndex = 0;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                Gameboard.gameboard[i][j] = null;
+            }
+        }
+        updateUI();
+    }
+    
     return gameStart;
-}
-
-function resetGame() {
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            Gameboard.gameboard[i][j] = null;
-        }
-    }
 }
 
 function checkIfFull() {
@@ -118,7 +120,7 @@ function checkWinner(player1, player2) {
             (Gameboard.gameboard[0][0] === center && Gameboard.gameboard[2][2] === center) ||
             (Gameboard.gameboard[2][0] === center && Gameboard.gameboard[0][2] === center)
         ) {
-            return center;
+            return center === player1.symbol? player1: player2;
         }
     }
 
@@ -134,6 +136,21 @@ function displayController() {
     addTilesToGameboard(gameboard, boardTiles); // add the buttons to the gameboard
 }
 
+function updateUI() {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            let tile = document.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+            if (Gameboard.gameboard[i][j] == 'X') {
+                tile.classList.add("board-tile-marked-cross");
+            } else if (Gameboard.gameboard[i][j] == 'O') {
+                tile.classList.add("board-tile-marked-circle");
+            } else {
+                tile.className = "board-tile";
+            }
+        }
+    }
+}
+
 function addTilesToGameboard(gameboard, boardTiles) {
     for (let i = 0; i < boardTiles.length; i++) {
         gameboard.append(boardTiles[i]);
@@ -141,7 +158,6 @@ function addTilesToGameboard(gameboard, boardTiles) {
 }
 
 const playGame = gameController();
-
 function boardTilesGenerator() {
     let boardTiles = [];
     for (let i = 0; i < 9; i++) {
@@ -166,11 +182,3 @@ function boardTilesGenerator() {
 }
 
 document.addEventListener("DOMContentLoaded", displayController);
-
-
-
-
-
-
-
-
