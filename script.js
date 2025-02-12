@@ -147,8 +147,8 @@ function addTilesToGameboard(gameboard, boardTiles) {
 function boardTilesGenerator() {
     let boardTiles = [];
     for (let i = 0; i < 9; i++) {
-        const boardTile = document.createElement("button");
-        boardTile.classList.add("board-buttons")
+        const boardTile = document.createElement("div");
+        boardTile.classList.add("board-tile")
         boardTiles.push(boardTile);
     }
     return boardTiles;
