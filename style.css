@@ -56,7 +56,6 @@ img {
     width: 500px;
     height: 500px;
     gap: 24px;
-    padding: 20px;
 }
 
 .board-tile-container {
@@ -115,7 +114,7 @@ img {
 }
 
 @media screen and (max-width: 600px) {
-    .gameboard-container {
+    .gameboard {
         margin: 16px;
         gap: 16px;
     }
