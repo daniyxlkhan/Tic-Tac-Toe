@@ -131,9 +131,9 @@ function checkWinner(player1, player2) {
 
 function displayController() {
     const gameboard = document.querySelector(".gameboard");
-    
-    const boardTiles = boardTilesGenerator(); // make buttons for the gameboard
-    addTilesToGameboard(gameboard, boardTiles); // add the buttons to the gameboard
+
+    const boardTileContainers = boardTilesContainerGenerator(); // make buttons for the gameboard
+    addTilesToGameboard(gameboard, boardTileContainers); // add the buttons to the gameboard
 }
 
 function updateUI() {
@@ -141,9 +141,9 @@ function updateUI() {
         for (let j = 0; j < 3; j++) {
             let tile = document.querySelector(`[data-x="${i}"][data-y="${j}"]`);
             if (Gameboard.gameboard[i][j] == 'X') {
-                tile.classList.add("board-tile-marked-cross");
+                tile.classList.add("cross");
             } else if (Gameboard.gameboard[i][j] == 'O') {
-                tile.classList.add("board-tile-marked-circle");
+                tile.classList.add("circle");
             } else {
                 tile.className = "board-tile";
             }
@@ -151,18 +151,24 @@ function updateUI() {
     }
 }
 
-function addTilesToGameboard(gameboard, boardTiles) {
-    for (let i = 0; i < boardTiles.length; i++) {
-        gameboard.append(boardTiles[i]);
+function addTilesToGameboard(gameboard, boardTileContainers) {
+    for (let i = 0; i < boardTileContainers.length; i++) {
+        gameboard.append(boardTileContainers[i]);
     }
 }
 
 const playGame = gameController();
-function boardTilesGenerator() {
-    let boardTiles = [];
+function boardTilesContainerGenerator() {
+    let boardTileContainers = [];
     for (let i = 0; i < 9; i++) {
+        const boardTileContainer = document.createElement("div");
         const boardTile = document.createElement("div");
-        boardTile.classList.add("board-tile")
+        const edge = document.createElement("div");
+        const shadow = document.createElement("div");
+
+        boardTileContainer.className = "board-tile-container";
+        boardTile.className = "board-tile";
+        shadow.className = "shadow";
 
         let x = Math.floor(i / 3); // Row index
         let y = i % 3; // Column index
@@ -176,9 +182,13 @@ function boardTilesGenerator() {
 
             playGame(tileX, tileY);
         })
-        boardTiles.push(boardTile);
+        boardTileContainer.append(boardTile);
+        boardTileContainer.append(edge);
+        boardTileContainer.append(shadow);
+
+        boardTileContainers.push(boardTileContainer);
     }
-    return boardTiles;
+    return boardTileContainers;
 }
 
 document.addEventListener("DOMContentLoaded", displayController);

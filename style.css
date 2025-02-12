@@ -1,10 +1,17 @@
 :root {
-    --background-color: #84a4b0;
-    --tile-color: #efefef;
+    --background-color: #DE8381;
+    --tile-color: #f2eff2;
 }
 
 body {
+    font-family: "Fredoka", sans-serif;
     background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
 }
 
 .gameboard {
@@ -13,17 +20,48 @@ body {
     grid-template-columns: repeat(3, 1fr);
     width: 500px;
     height: 500px;
-    column-gap: 24px;
-    row-gap: 20px;
+    gap: 24px;
+}
+
+.board-tile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 .board-tile {
-    background-color: #efefef;
-    width: 150px;
-    height: 150px;
+    background-color: var(--tile-color);
+    border-radius: 12px;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    transition-property: transform;
+    transition-duration: 0.2s;
 }
 
-.board-tile-marked-cross {
+.board-tile:hover:not(.circle, .cross) {
+    transform: rotateX(15deg);
+}  
+
+.shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #717b7f;
+    top: 8px;
+    left: -8px;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.cross,
+.circle {
+  cursor: default;
+}
+
+.cross {
     background-image: url("./assets/cross-svgrepo-com.svg");
     background-repeat: no-repeat;
     background-position-x: 48%;
@@ -31,15 +69,11 @@ body {
     background-size: 60%;
 }
 
-.board-tile-marked-circle {
+.circle {
     background-image: url("./assets/circle-svgrepo-com.svg");
     background-repeat: no-repeat;
     background-position-x: 48%;
     background-position-y: 52%;
     background-size: 60%;
 }
-
-/*.x-mark {*/
-/*    img:*/
-/*}*/
 
